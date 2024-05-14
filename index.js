@@ -29,15 +29,13 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    const softwares = client.db("course_selling").collection("softwates");
+    const courses = client.db("TutionEX").collection("courses");
 
-    // =================== software crud operations ======================
-    app.get("/software/:categories", async (req, res) => {
+
+    // =================== courses crud operations ======================
+    app.get("/courses", async (req, res) => {
       console.log("hit")
-      const categories = req.params.categories;
-      const query = { category: categories };
-      const result = await softwares.find(query).toArray();
-      console.log(result)
+      const result = await courses.find().toArray();
       res.send(result);
     });
     
