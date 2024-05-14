@@ -35,17 +35,10 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-
+    const cart = client.db("TutionEX").collection("cart");
+    const users = client.db("TutionEX").collection("users");
     const courses = client.db("TutionEX").collection("courses");
-    const cart = client.db("course_selling").collection("cart");
-    const users = client.db("course_selling").collection("users");
-    const courses = client.db("course_selling").collection("courses");
-    const discussion = client.db("course_selling").collection("discussion");
-    // =================== courses crud operations ======================
-    app.get("/courses", async (req, res) => {
-      console.log("hit")
-      const result = await courses.find().toArray();
-    });
+    const discussion = client.db("TutionEX").collection("discussion");
      // =================== discussion crud operations =======================
      app.post("/discussion", async (req, res) => {
       const course = req.body;
@@ -87,10 +80,6 @@ async function run() {
     });
 
     // Get all courses
-    // app.get("/courses", async (req, res) => {
-    //   const result = await courses.find().toArray();
-    //   res.send(result);
-    // });
     app.get("/courses", async (req, res) => {
       let queryObj = {};
       let sortObj = {};
@@ -101,13 +90,10 @@ async function run() {
       const limit = Number(req.query.limit);
       const skip = (page - 1) * limit;
       const courseName = req.query.courseName;
-      // console.log(category, sortField, sortOrder,productName, limit,skip)
       if (category) {
         queryObj.category = category;
       }
-      if (brand) {
-        queryObj.brand = brand;
-      }
+     
       if (sortField && sortOrder) {
         if (sortOrder == "rating") {
           sortObj["rating"] = "desc";
@@ -117,9 +103,10 @@ async function run() {
       }
       if (courseName) {
         const searchTerm = new RegExp(courseName, "i"); // 'i' for case-insensitive search
-        queryObj.name = searchTerm;
+        queryObj.title = searchTerm;
       }
-      const result = await products
+      
+      const result = await courses
         .find(queryObj)
         .skip(skip)
         .limit(limit)
