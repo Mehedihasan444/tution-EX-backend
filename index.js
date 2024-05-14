@@ -39,6 +39,11 @@ async function run() {
     const users = client.db("TutionEX").collection("users");
     const courses = client.db("TutionEX").collection("courses");
     const discussion = client.db("TutionEX").collection("discussion");
+    // =================== courses crud operations ======================
+    app.get("/courses", async (req, res) => {
+      console.log("hit")
+      const result = await courses.find().toArray();
+    });
      // =================== discussion crud operations =======================
      app.post("/discussion", async (req, res) => {
       const course = req.body;
