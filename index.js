@@ -33,10 +33,17 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+
+    const courses = client.db("TutionEX").collection("courses");
     const cart = client.db("course_selling").collection("cart");
     const users = client.db("course_selling").collection("users");
     const courses = client.db("course_selling").collection("courses");
     const discussion = client.db("course_selling").collection("discussion");
+    // =================== courses crud operations ======================
+    app.get("/courses", async (req, res) => {
+      console.log("hit")
+      const result = await courses.find().toArray();
+    });
      // =================== discussion crud operations =======================
      app.post("/discussion", async (req, res) => {
       const course = req.body;
@@ -315,6 +322,7 @@ async function run() {
         },
       };
       const result = await users.updateOne(filter, updatedDoc);
+
       res.send(result);
     });
     console.log(
