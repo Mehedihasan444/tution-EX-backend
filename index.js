@@ -140,7 +140,7 @@ async function run() {
     // delete items from cart
     app.delete("/cart/:id", async (req, res) => {
       const id = req.params.id;
-      const query = { _id: id };
+      const query = { _id: new ObjectId(id) };
       const result = await cart.deleteOne(query);
       res.send(result);
     });
@@ -292,6 +292,13 @@ async function run() {
         res.send({ admin: false });
       }
    
+    });
+// delete a course
+    app.delete("/admin/courses/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await courses.deleteOne(query);
+      res.send(result);
     });
 // delete a user
     app.delete("/users/admin/:email", async (req, res) => {
